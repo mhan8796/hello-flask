@@ -1,0 +1,18 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    image: hello-flask-backend:0.1.0
+    environment:
+      FRONTEND_ORIGIN: http://127.0.0.1:5174
+    ports:
+      - "5002:5002"
+
+  frontend:
+    build:
+      context: ./frontend
+    image: hello-flask-frontend:0.1.0
+    depends_on:
+      - backend
+    ports:
+      - "5174:80"

@@ -1,0 +1,155 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: #17202a;
+    background:
+        radial-gradient(circle at 18% 12%, rgba(42, 157, 143, 0.22), transparent 24rem),
+        radial-gradient(circle at 82% 4%, rgba(248, 216, 107, 0.28), transparent 22rem),
+        linear-gradient(135deg, #f7fbff 0%, #eef5f2 52%, #fff8ed 100%);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+}
+
+button {
+    font: inherit;
+}
+
+.app-shell {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+}
+
+.hero {
+    width: min(100%, 48rem);
+    padding: clamp(2rem, 6vw, 4rem);
+    border: 1px solid rgba(23, 32, 42, 0.12);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 24px 70px rgba(23, 32, 42, 0.14);
+    backdrop-filter: blur(18px);
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 1.35rem;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid rgba(42, 157, 143, 0.28);
+    border-radius: 999px;
+    color: #24796f;
+    background: rgba(42, 157, 143, 0.1);
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.status-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: #2a9d8f;
+    box-shadow: 0 0 0 0.25rem rgba(42, 157, 143, 0.16);
+}
+
+h1 {
+    margin: 0;
+    font-size: clamp(3rem, 10vw, 6rem);
+    line-height: 0.96;
+    letter-spacing: 0;
+}
+
+.intro {
+    max-width: 36rem;
+    margin: 1.25rem 0 0;
+    color: #526271;
+    font-size: 1.2rem;
+    line-height: 1.65;
+}
+
+.response-panel {
+    min-height: 10rem;
+    margin-top: 2rem;
+    padding: 1.25rem;
+    border: 1px solid rgba(23, 32, 42, 0.1);
+    border-radius: 8px;
+    background: #f8fbfa;
+}
+
+.label {
+    display: block;
+    margin-bottom: 0.55rem;
+    color: #1971c2;
+    font-size: 0.78rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+h2 {
+    margin: 0;
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    letter-spacing: 0;
+}
+
+.response-panel p {
+    margin: 0.75rem 0 0;
+    color: #526271;
+    line-height: 1.55;
+}
+
+time {
+    display: block;
+    margin-top: 1rem;
+    color: #7a8793;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.muted {
+    color: #526271;
+}
+
+.error {
+    color: #b42318;
+    font-weight: 700;
+}
+
+button {
+    margin-top: 1rem;
+    border: 0;
+    border-radius: 8px;
+    padding: 0.9rem 1.15rem;
+    color: white;
+    background: #1971c2;
+    font-weight: 850;
+    cursor: pointer;
+    box-shadow: 0 12px 28px rgba(25, 113, 194, 0.22);
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
+}
+
+@media (max-width: 560px) {
+    .app-shell {
+        padding: 1rem;
+    }
+
+    .hero {
+        padding: 1.5rem;
+    }
+
+    .intro {
+        font-size: 1rem;
+    }
+}
