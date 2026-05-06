@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-flask-backend
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: hello-flask-backend
+  template:
+    metadata:
+      labels:
+        app: hello-flask-backend
+    spec:
+      containers:
+        - name: backend
+          image: {{ .Values.image }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: FRONTEND_ORIGIN
+              value: {{ .Values.frontendOrigin | quote }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-flask-backend
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: hello-flask-backend
+  ports:
+    - name: http
+      port: {{ .Values.port }}
+      targetPort: http

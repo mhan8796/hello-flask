@@ -1,0 +1,14 @@
+namespace: hello-flask
+
+image: hello-flask-frontend:0.1.0
+replicas: 1
+port: 80
+
+backend:
+  serviceName: hello-flask-backend
+  servicePortName: http
+
+ingress:
+  enabled: true
+  className: nginx
+  host: ""

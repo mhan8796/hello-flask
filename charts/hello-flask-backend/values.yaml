@@ -1,0 +1,6 @@
+namespace: hello-flask
+
+image: hello-flask-backend:0.1.0
+replicas: 1
+port: 5002
+frontendOrigin: "http://127.0.0.1:8080"
