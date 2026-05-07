@@ -107,3 +107,23 @@ http://127.0.0.1:8080
 ```
 
 The Ingress routes `/` to the frontend service and `/api` to the backend service.
+
+## Deploy With GitHub Actions
+
+The workflow at `.github/workflows/deploy.yml` builds both Docker images,
+pushes them to GitHub Container Registry, and deploys both Helm charts.
+
+Create this GitHub Actions secret:
+
+```text
+KUBE_CONFIG
+```
+
+The value should be your kubeconfig encoded as base64:
+
+```bash
+base64 -i ~/.kube/config | pbcopy
+```
+
+The workflow tags images with the Git commit SHA and deploys them into the
+`hello-flask` namespace.
