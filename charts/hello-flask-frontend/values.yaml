@@ -1,6 +1,6 @@
 namespace: hello-flask
 
-image: ghcr.io/mhan8796/hello-flask/hello-flask-frontend:3ce64d577c5ef5e9f0d5a6c1d94fef257d75187b
+image: ghcr.io/mhan8796/hello-flask/hello-flask-frontend:d0c0db240bc3f4b53b48cad4458de4cc1a694b4a
 replicas: 1
 port: 80
 
