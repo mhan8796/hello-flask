@@ -1,4 +1,4 @@
-name: Deploy hello-flask
+name: Build hello-flask images
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
       - "frontend/**"
       - "charts/**"
       - ".github/workflows/deploy.yml"
+      - "scripts/**"
   workflow_dispatch:
 
 env:
@@ -16,13 +17,12 @@ env:
   BACKEND_IMAGE_NAME: ${{ github.repository }}/hello-flask-backend
   FRONTEND_IMAGE_NAME: ${{ github.repository }}/hello-flask-frontend
   IMAGE_TAG: ${{ github.sha }}
-  NAMESPACE: hello-flask
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
 
     steps:
@@ -61,26 +61,21 @@ jobs:
           helm lint charts/hello-flask-backend
           helm lint charts/hello-flask-frontend
 
-      - name: Configure kubeconfig
+      - name: Update Helm image values
         run: |
-          mkdir -p "$HOME/.kube"
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > "$HOME/.kube/config"
-          chmod 600 "$HOME/.kube/config"
+          python3 scripts/update_helm_images.py \
+            --backend-image "${REGISTRY}/${BACKEND_IMAGE_NAME}:${IMAGE_TAG}" \
+            --frontend-image "${REGISTRY}/${FRONTEND_IMAGE_NAME}:${IMAGE_TAG}"
 
-      - name: Deploy backend chart
+      - name: Commit image value changes
         run: |
-          helm upgrade --install hello-flask-backend charts/hello-flask-backend \
-            --namespace "$NAMESPACE" \
-            --create-namespace \
-            --set image="${REGISTRY}/${BACKEND_IMAGE_NAME}:${IMAGE_TAG}" \
-            --wait \
-            --timeout 5m
+          if git diff --quiet charts/hello-flask-backend/values.yaml charts/hello-flask-frontend/values.yaml; then
+            echo "Helm image values are already current."
+            exit 0
+          fi
 
-      - name: Deploy frontend chart
-        run: |
-          helm upgrade --install hello-flask-frontend charts/hello-flask-frontend \
-            --namespace "$NAMESPACE" \
-            --create-namespace \
-            --set image="${REGISTRY}/${FRONTEND_IMAGE_NAME}:${IMAGE_TAG}" \
-            --wait \
-            --timeout 5m
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add charts/hello-flask-backend/values.yaml charts/hello-flask-frontend/values.yaml
+          git commit -m "Update hello-flask image tags [skip ci]"
+          git push

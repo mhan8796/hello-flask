@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hello-flask-frontend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/mhan8796/hello-flask.git
+    targetRevision: main
+    path: charts/hello-flask-frontend
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hello-flask
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

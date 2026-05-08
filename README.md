@@ -108,22 +108,42 @@ http://127.0.0.1:8080
 
 The Ingress routes `/` to the frontend service and `/api` to the backend service.
 
-## Deploy With GitHub Actions
+## GitOps Deploy With GitHub Actions And Argo CD
 
-The workflow at `.github/workflows/deploy.yml` builds both Docker images,
-pushes them to GitHub Container Registry, and deploys both Helm charts.
+The workflow at `.github/workflows/deploy.yml` builds both Docker images and
+pushes them to GitHub Container Registry. It does not talk to Kubernetes
+directly.
 
-Create this GitHub Actions secret:
+After pushing images, the workflow updates these Helm values files with the new
+image tags and commits the change back to `main`:
 
 ```text
-KUBE_CONFIG
+charts/hello-flask-backend/values.yaml
+charts/hello-flask-frontend/values.yaml
 ```
 
-The value should be your kubeconfig encoded as base64:
+Argo CD then watches this repo, sees the changed chart values, and syncs the
+Helm charts into Kubernetes.
+
+The Argo CD Application manifests are:
+
+```text
+argocd/hello-flask-backend.yaml
+argocd/hello-flask-frontend.yaml
+```
+
+After Argo CD is installed in a cluster, apply them once:
 
 ```bash
-base64 -i ~/.kube/config | pbcopy
+kubectl apply -f argocd/hello-flask-backend.yaml
+kubectl apply -f argocd/hello-flask-frontend.yaml
 ```
 
-The workflow tags images with the Git commit SHA and deploys them into the
-`hello-flask` namespace.
+From then on, the flow is:
+
+```text
+Git push
+  -> GitHub Actions builds and pushes images
+  -> GitHub Actions updates Helm values in Git
+  -> Argo CD syncs Kubernetes from Git
+```
