@@ -58,8 +58,8 @@ Build the images and load them into the local kind cluster:
 
 ```bash
 docker compose build
-../kubernetes-lab/bin/kind load docker-image hello-flask-backend:0.1.0 --name terraform-k8s
-../kubernetes-lab/bin/kind load docker-image hello-flask-frontend:0.1.0 --name terraform-k8s
+./bin/kind load docker-image hello-flask-backend:0.1.0 --name terraform-k8s
+./bin/kind load docker-image hello-flask-frontend:0.1.0 --name terraform-k8s
 ```
 
 Install NGINX ingress with Helm:
@@ -128,6 +128,7 @@ Helm charts into Kubernetes.
 The Argo CD Application manifests are:
 
 ```text
+argocd/ingress-nginx.yaml
 argocd/hello-flask-backend.yaml
 argocd/hello-flask-frontend.yaml
 ```
@@ -135,6 +136,7 @@ argocd/hello-flask-frontend.yaml
 After Argo CD is installed in a cluster, apply them once:
 
 ```bash
+kubectl apply -f argocd/ingress-nginx.yaml
 kubectl apply -f argocd/hello-flask-backend.yaml
 kubectl apply -f argocd/hello-flask-frontend.yaml
 ```
